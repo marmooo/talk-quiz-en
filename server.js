@@ -10,7 +10,7 @@ const port = 8080;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/talk-quiz-en/', express.static('talk-quiz-en'));
+app.use('/talk-quiz-en/', express.static('src'));
 const server = https.createServer(serverOptions, app);
 server.listen(port);
 // app.listen(port);
