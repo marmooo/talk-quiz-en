@@ -175,7 +175,7 @@ function setVoiceInput() {
   } else {
     let voiceInput = new webkitSpeechRecognition();
     voiceInput.lang = 'en-US';
-    voiceInput.interimResults = true;
+    // voiceInput.interimResults = true;
     voiceInput.continuous = true;
 
     voiceInput.onstart = (event) => {
