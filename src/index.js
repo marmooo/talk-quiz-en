@@ -31,11 +31,11 @@ function toggleDarkMode() {
 }
 
 function toggleVoice(obj) {
-  speechSynthesis.cancel();
   if (localStorage.getItem('voice') == 1) {
     localStorage.setItem('voice', 0);
     document.getElementById('voiceOn').classList.add('d-none');
     document.getElementById('voiceOff').classList.remove('d-none');
+    speechSynthesis.cancel();
   } else {
     localStorage.setItem('voice', 1);
     document.getElementById('voiceOn').classList.remove('d-none');
@@ -81,6 +81,7 @@ function loadVoices() {
 loadVoices();
 
 function speak() {
+  speechSynthesis.cancel();
   var msg = new SpeechSynthesisUtterance(answer);
   msg.voice = englishVoices[Math.floor(Math.random() * englishVoices.length)];
   msg.lang = 'en-US';
@@ -127,9 +128,10 @@ function changeProblem() {
   if (isEnabled(document.getElementById('english'))) {
     problem.innerText += ' (' + en + ')';
   }
-  speechSynthesis.cancel();
   if (localStorage.getItem('voice') == 1) {
     speak();
+  } else {
+    speechSynthesis.cancel();
   }
 }
 
