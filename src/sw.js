@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-05-04 10:35';
+var CACHE_NAME = '2021-05-20 09:40';
 var urlsToCache = [
   '/talk-quiz-en/',
   '/talk-quiz-en/4.lst',
@@ -6,7 +6,7 @@ var urlsToCache = [
   '/talk-quiz-en/6.lst',
   '/talk-quiz-en/index.js',
   '/talk-quiz-en/mp3/correct3.mp3',
-  'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css',
 ];
 
 self.addEventListener('install', function(event) {
