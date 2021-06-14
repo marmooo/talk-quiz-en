@@ -1,21 +1,22 @@
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWZXYabcdefghijklmnopqrstuvwxyz';
-const correctAudio = new Audio('/talk-quiz-en/mp3/correct3.mp3');
+let incorrectAudio, correctAudio;
+loadAudios();
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
 let voiceInput = setVoiceInput();
 let doNext = false;
 let problems = [];
 let answer = 'Gopher';
 let firstRun = true;
-let canvasCache = document.createElement('canvas').getContext('2d');
-let model;
 let englishVoices = [];
 
 function loadConfig() {
   if (localStorage.getItem('darkMode') == 1) {
     document.documentElement.dataset.theme = 'dark';
   }
-  if (localStorage.getItem('voice') != 1) {
-    document.getElementById('voiceOn').classList.add('d-none');
-    document.getElementById('voiceOff').classList.remove('d-none');
+  if (localStorage.getItem('voice') != 0) {
+    document.getElementById('voiceOn').classList.remove('d-none');
+    document.getElementById('voiceOff').classList.add('d-none');
   }
 }
 loadConfig();
@@ -31,7 +32,7 @@ function toggleDarkMode() {
 }
 
 function toggleVoice(obj) {
-  if (localStorage.getItem('voice') == 1) {
+  if (localStorage.getItem('voice') != 0) {
     localStorage.setItem('voice', 0);
     document.getElementById('voiceOn').classList.add('d-none');
     document.getElementById('voiceOff').classList.remove('d-none');
@@ -40,8 +41,7 @@ function toggleVoice(obj) {
     localStorage.setItem('voice', 1);
     document.getElementById('voiceOn').classList.remove('d-none');
     document.getElementById('voiceOff').classList.add('d-none');
-    unlockAudio();
-    speak();
+    speak(answer);
   }
 }
 
@@ -61,6 +61,50 @@ function isEnabled(obj) {
   }
 }
 
+function playAudio(audioBuffer, volume) {
+  const audioSource = audioContext.createBufferSource();
+  audioSource.buffer = audioBuffer;
+  if (volume) {
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = volume;
+    gainNode.connect(audioContext.destination);
+    audioSource.connect(gainNode);
+    audioSource.start();
+  } else {
+    audioSource.connect(audioContext.destination);
+    audioSource.start();
+  }
+}
+
+function unlockAudio() {
+  audioContext.resume();
+}
+
+function loadAudio(url) {
+  return fetch(url)
+    .then(response => response.arrayBuffer())
+    .then(arrayBuffer => {
+      return new Promise((resolve, reject) => {
+        audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
+          resolve(audioBuffer);
+        }, (err) => {
+          reject(err);
+        });
+      });
+    });
+}
+
+function loadAudios() {
+  promises = [
+    loadAudio('mp3/incorrect1.mp3'),
+    loadAudio('mp3/correct3.mp3'),
+  ];
+  Promise.all(promises).then(audioBuffers => {
+    incorrectAudio = audioBuffers[0];
+    correctAudio = audioBuffers[1];
+  });
+}
+
 function loadVoices() {
   // https://stackoverflow.com/questions/21513706/
   const allVoicesObtained = new Promise(function(resolve, reject) {
@@ -75,29 +119,22 @@ function loadVoices() {
     }
   });
   allVoicesObtained.then(voices => {
-    englishVoices = voices.filter(voice => voice.lang == 'en-US' );
+    englishVoices = voices.filter(voice => voice.lang == 'en-US');
   });
 }
 loadVoices();
 
-function speak() {
+function speak(text) {
   speechSynthesis.cancel();
-  var msg = new SpeechSynthesisUtterance(answer);
+  var msg = new SpeechSynthesisUtterance(text);
   msg.voice = englishVoices[Math.floor(Math.random() * englishVoices.length)];
   msg.lang = 'en-US';
-  msg.onend = async function() {
-    await sleep(1000);  // 音声読み上げを音声認識しないように
-    voiceInput.start();
-  }
   speechSynthesis.speak(msg);
+  return msg;
 }
 
-function unlockAudio() {
-  correctAudio.volume = 0;
-  correctAudio.play();
-  correctAudio.pause();
-  correctAudio.currentTime = 0;
-  correctAudio.volume = 1;
+function respeak() {
+  speak(answer);
 }
 
 function getRandomInt(min, max) {
@@ -112,12 +149,21 @@ function hideAnswer() {
 }
 
 function showAnswer() {
+  const msg = speak(answer);
+  if (!firstRun) {
+    msg.onstart = function() {
+      voiceInput.stop();  // 音声読み上げを音声認識しないように
+    }
+    msg.onstart = function() {
+      voiceInput.start();
+    }
+  }
   var node = document.getElementById('answer');
   node.classList.remove('d-none');
-  node.innerText = answer;
+  node.textContent = answer;
 }
 
-function changeProblem() {
+function nextProblem() {
   var [en, ja] = problems[getRandomInt(0, problems.length - 1)];
   var input = document.getElementById('cse-search-input-box-id');
   input.value = ja;
@@ -128,10 +174,14 @@ function changeProblem() {
   if (isEnabled(document.getElementById('english'))) {
     problem.innerText += ' (' + en + ')';
   }
-  if (localStorage.getItem('voice') == 1) {
-    speak();
-  } else {
-    speechSynthesis.cancel();
+  if (localStorage.getItem('voice') != 0) {
+    const msg = speak(answer);
+    msg.onstart = function() {
+      voiceInput.stop();  // 音声読み上げを音声認識しないように
+    }
+    msg.onend = async function() {
+      voiceInput.start();
+    }
   }
 }
 
@@ -146,15 +196,11 @@ function initProblems() {
 }
 initProblems();
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function searchByGoogle(event) {
   event.preventDefault();
   var input = document.getElementById('cse-search-input-box-id');
   var element = google.search.cse.element.getElement('searchresults-only0');
-  changeProblem();
+  nextProblem();
   if (input.value == '') {
     element.clearAllResults();
   } else {
@@ -166,7 +212,6 @@ function searchByGoogle(event) {
     while (gophers.firstChild) {
       gophers.removeChild(gophers.lastChild);
     }
-    unlockAudio();
     firstRun = false;
   }
   document.getElementById('reply').textContent = '英語で答えてください';
@@ -198,9 +243,10 @@ function setVoiceInput() {
       const reply = event.results[0][0].transcript;
       document.getElementById('reply').textContent = reply;
       if (reply.toLowerCase() == answer.toLowerCase()) {
-        correctAudio.play();
+        playAudio(correctAudio);
         doNext = false;
       } else {
+        playAudio(incorrectAudio);
         doNext = true;
       }
       voiceInput.stop();
@@ -222,4 +268,7 @@ function stopVoiceInput() {
   doNext = false;
   voiceInput.stop();
 }
+
+
+document.addEventListener('click', unlockAudio, { once:true, useCapture:true });
 
