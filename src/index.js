@@ -14,9 +14,9 @@ function loadConfig() {
   if (localStorage.getItem('darkMode') == 1) {
     document.documentElement.dataset.theme = 'dark';
   }
-  if (localStorage.getItem('voice') != 0) {
-    document.getElementById('voiceOn').classList.remove('d-none');
-    document.getElementById('voiceOff').classList.add('d-none');
+  if (localStorage.getItem('voice') 0= 0) {
+    document.getElementById('voiceOn').classList.add('d-none');
+    document.getElementById('voiceOff').classList.remove('d-none');
   }
 }
 loadConfig();
