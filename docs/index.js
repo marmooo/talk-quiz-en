@@ -10,7 +10,8 @@ function loadAudio(url){return fetch(url).then(response=>response.arrayBuffer())
 function loadAudios(){promises=[loadAudio('mp3/incorrect1.mp3'),loadAudio('mp3/correct3.mp3'),];Promise.all(promises).then(audioBuffers=>{incorrectAudio=audioBuffers[0];correctAudio=audioBuffers[1];});}
 function loadVoices(){const allVoicesObtained=new Promise(function(resolve,reject){let voices=speechSynthesis.getVoices();if(voices.length!==0){resolve(voices);}else{speechSynthesis.addEventListener("voiceschanged",function(){voices=speechSynthesis.getVoices();resolve(voices);});}});allVoicesObtained.then(voices=>{englishVoices=voices.filter(voice=>voice.lang=='en-US');});}
 loadVoices();function speak(text){speechSynthesis.cancel();var msg=new SpeechSynthesisUtterance(text);msg.voice=englishVoices[Math.floor(Math.random()*englishVoices.length)];msg.lang='en-US';speechSynthesis.speak(msg);return msg;}
-function respeak(){speak(answer);}
+function respeak(){const msg=speak(answer);msg.onstart=function(){voiceInput.stop();}
+msg.onend=async function(){voiceInput.start();}}
 function getRandomInt(min,max){min=Math.ceil(min);max=Math.floor(max);return Math.floor(Math.random()*(max-min)+min);}
 function hideAnswer(){var node=document.getElementById('answer');node.classList.add('d-none');}
 function showAnswer(){const msg=speak(answer);if(!firstRun){msg.onstart=function(){voiceInput.stop();}

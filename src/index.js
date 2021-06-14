@@ -134,7 +134,13 @@ function speak(text) {
 }
 
 function respeak() {
-  speak(answer);
+  const msg = speak(answer);
+  msg.onstart = function() {
+    voiceInput.stop();  // 音声読み上げを音声認識しないように
+  }
+  msg.onend = async function() {
+    voiceInput.start();
+  }
 }
 
 function getRandomInt(min, max) {
