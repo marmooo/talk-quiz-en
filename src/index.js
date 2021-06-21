@@ -4,7 +4,6 @@ loadAudios();
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
 let voiceInput = setVoiceInput();
-let doNext = false;
 let problems = [];
 let answer = 'Gopher';
 let firstRun = true;
@@ -41,6 +40,7 @@ function toggleVoice(obj) {
     localStorage.setItem('voice', 1);
     document.getElementById('voiceOn').classList.remove('d-none');
     document.getElementById('voiceOff').classList.add('d-none');
+    voiceInput.stop();
     speak(answer);
   }
 }
@@ -134,11 +134,9 @@ function speak(text) {
 }
 
 function respeak() {
+  voiceInput.stop();
   const msg = speak(answer);
-  msg.onstart = function() {
-    voiceInput.stop();  // 音声読み上げを音声認識しないように
-  }
-  msg.onend = async function() {
+  msg.onend = function() {
     voiceInput.start();
   }
 }
@@ -155,12 +153,10 @@ function hideAnswer() {
 }
 
 function showAnswer() {
+  voiceInput.stop();
   const msg = speak(answer);
   if (!firstRun) {
-    msg.onstart = function() {
-      voiceInput.stop();  // 音声読み上げを音声認識しないように
-    }
-    msg.onstart = function() {
+    msg.onend = function() {
       voiceInput.start();
     }
   }
@@ -181,10 +177,8 @@ function nextProblem() {
     problem.innerText += ' (' + en + ')';
   }
   if (localStorage.getItem('voice') != 0) {
+    voiceInput.stop();
     const msg = speak(answer);
-    msg.onstart = function() {
-      voiceInput.stop();  // 音声読み上げを音声認識しないように
-    }
     msg.onend = async function() {
       voiceInput.start();
     }
@@ -210,7 +204,7 @@ function searchByGoogle(event) {
   if (input.value == '') {
     element.clearAllResults();
   } else {
-    voiceInput.stop();  // TODO: 連打するとエラーが出る
+    voiceInput.stop();
     element.execute(input.value);
   }
   if (firstRun) {
@@ -240,30 +234,17 @@ function setVoiceInput() {
       startButton.classList.add('d-none');
       stopButton.classList.remove('d-none');
     };
-    voiceInput.onerror = (event) => {
-      voiceInput.stop();
-      voiceInput.start();
-    };
-    voiceInput.onnomatch = (event) => {
-      voiceInput.stop();
-      voiceInput.start();
-    };
     voiceInput.onend = (event) => {
-      if (doNext) {
-        voiceInput.start();
-      }
+      voiceInput.start();
     };
     voiceInput.onresult = (event) => {
       const reply = event.results[0][0].transcript;
       document.getElementById('reply').textContent = reply;
       if (reply.toLowerCase() == answer.toLowerCase()) {
         playAudio(correctAudio);
-        doNext = false;
       } else {
         playAudio(incorrectAudio);
-        doNext = true;
       }
-      voiceInput.stop();
     };
     return voiceInput;
   }
@@ -279,7 +260,6 @@ function stopVoiceInput() {
   startButton.classList.remove('d-none');
   stopButton.classList.add('d-none');
   document.getElementById('reply').textContent = '英語で答えてください';
-  doNext = false;
   voiceInput.stop();
 }
 
