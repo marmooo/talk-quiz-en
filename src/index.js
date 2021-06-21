@@ -240,6 +240,14 @@ function setVoiceInput() {
       startButton.classList.add('d-none');
       stopButton.classList.remove('d-none');
     };
+    voiceInput.onerror = (event) => {
+      voiceInput.stop();
+      voiceInput.start();
+    };
+    voiceInput.onnomatch = (event) => {
+      voiceInput.stop();
+      voiceInput.start();
+    };
     voiceInput.onend = (event) => {
       if (doNext) {
         voiceInput.start();
