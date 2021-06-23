@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-06-21 23:30';
+var CACHE_NAME = '2021-06-24 07:06';
 var urlsToCache = [
   '/talk-quiz-en/',
   '/talk-quiz-en/4.lst',
@@ -7,7 +7,7 @@ var urlsToCache = [
   '/talk-quiz-en/index.js',
   '/talk-quiz-en/mp3/incorrect1.mp3',
   '/talk-quiz-en/mp3/correct3.mp3',
-  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
 ];
 
 self.addEventListener('install', function(event) {
