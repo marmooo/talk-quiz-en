@@ -40,7 +40,6 @@ function toggleVoice(obj) {
     localStorage.setItem('voice', 1);
     document.getElementById('voiceOn').classList.remove('d-none');
     document.getElementById('voiceOff').classList.add('d-none');
-    voiceInput.stop();
     speak(answer);
   }
 }
@@ -126,19 +125,16 @@ loadVoices();
 
 function speak(text) {
   speechSynthesis.cancel();
-  var msg = new SpeechSynthesisUtterance(text);
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.onend = () => { voiceInput.start(); };
   msg.voice = englishVoices[Math.floor(Math.random() * englishVoices.length)];
   msg.lang = 'en-US';
+  voiceInput.stop();
   speechSynthesis.speak(msg);
-  return msg;
 }
 
 function respeak() {
-  voiceInput.stop();
-  const msg = speak(answer);
-  msg.onend = function() {
-    voiceInput.start();
-  }
+  speak(answer);
 }
 
 function getRandomInt(min, max) {
@@ -153,12 +149,9 @@ function hideAnswer() {
 }
 
 function showAnswer() {
-  voiceInput.stop();
-  const msg = speak(answer);
-  if (!firstRun) {
-    msg.onend = function() {
-      voiceInput.start();
-    }
+  speak(answer);
+  if (firstRun) {
+    voiceInput.abort();
   }
   var node = document.getElementById('answer');
   node.classList.remove('d-none');
@@ -177,11 +170,7 @@ function nextProblem() {
     problem.innerText += ' (' + en + ')';
   }
   if (localStorage.getItem('voice') != 0) {
-    voiceInput.stop();
-    const msg = speak(answer);
-    msg.onend = async function() {
-      voiceInput.start();
-    }
+    speak(answer);
   }
 }
 
@@ -235,7 +224,9 @@ function setVoiceInput() {
       stopButton.classList.remove('d-none');
     };
     voiceInput.onend = (event) => {
-      voiceInput.start();
+      if (!speechSynthesis.speaking) {
+        voiceInput.start();
+      }
     };
     voiceInput.onresult = (event) => {
       const reply = event.results[0][0].transcript;
@@ -245,6 +236,7 @@ function setVoiceInput() {
       } else {
         playAudio(incorrectAudio);
       }
+      voiceInput.stop();
     };
     return voiceInput;
   }
