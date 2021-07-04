@@ -176,12 +176,14 @@ function nextProblem() {
 
 function initProblems() {
   var grade = document.getElementById('grade').selectedIndex + 2;
+  console.log(grade);
   fetch(grade + '.lst').then(response => response.text()).then(tsv => {
     problems = [];
     tsv.split('\n').forEach(line => {
       var [en, ja] = line.split("\t");
       problems.push([en, ja]);
     });
+    console.log(problems);
   });
 }
 initProblems();
@@ -257,5 +259,6 @@ function stopVoiceInput() {
 }
 
 
+document.getElementById('grade').onchange = initProblems;
 document.addEventListener('click', unlockAudio, { once:true, useCapture:true });
 

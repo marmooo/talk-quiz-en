@@ -17,7 +17,7 @@ function showAnswer(){speak(answer);if(firstRun){voiceInput.abort();}
 var node=document.getElementById('answer');node.classList.remove('d-none');node.textContent=answer;}
 function nextProblem(){var[en,ja]=problems[getRandomInt(0,problems.length-1)];var input=document.getElementById('cse-search-input-box-id');input.value=ja;answer=en;hideAnswer();const problem=document.getElementById('problem');problem.innerText=ja;if(isEnabled(document.getElementById('english'))){problem.innerText+=' ('+en+')';}
 if(localStorage.getItem('voice')!=0){speak(answer);}}
-function initProblems(){var grade=document.getElementById('grade').selectedIndex+2;fetch(grade+'.lst').then(response=>response.text()).then(tsv=>{problems=[];tsv.split('\n').forEach(line=>{var[en,ja]=line.split("\t");problems.push([en,ja]);});});}
+function initProblems(){var grade=document.getElementById('grade').selectedIndex+2;console.log(grade);fetch(grade+'.lst').then(response=>response.text()).then(tsv=>{problems=[];tsv.split('\n').forEach(line=>{var[en,ja]=line.split("\t");problems.push([en,ja]);});console.log(problems);});}
 initProblems();function searchByGoogle(event){event.preventDefault();var input=document.getElementById('cse-search-input-box-id');var element=google.search.cse.element.getElement('searchresults-only0');nextProblem();if(input.value==''){element.clearAllResults();}else{voiceInput.stop();element.execute(input.value);}
 if(firstRun){const gophers=document.getElementById('gophers');while(gophers.firstChild){gophers.removeChild(gophers.lastChild);}
 firstRun=false;}
@@ -26,4 +26,4 @@ document.getElementById('cse-search-box-form-id').onsubmit=searchByGoogle;functi
 voiceInput.stop();};return voiceInput;}}
 function startVoiceInput(){voiceInput.start();}
 function stopVoiceInput(){const startButton=document.getElementById('start-voice-input');const stopButton=document.getElementById('stop-voice-input');startButton.classList.remove('d-none');stopButton.classList.add('d-none');document.getElementById('reply').textContent='英語で答えてください';voiceInput.stop();}
-document.addEventListener('click',unlockAudio,{once:true,useCapture:true});
+document.getElementById('grade').onchange=initProblems;document.addEventListener('click',unlockAudio,{once:true,useCapture:true});
