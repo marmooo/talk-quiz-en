@@ -177,6 +177,7 @@ function nextProblem() {
 function initProblems() {
   var grade = document.getElementById('grade').selectedIndex + 2;
   fetch(grade + '.lst').then(response => response.text()).then(tsv => {
+    problems = [];
     tsv.split('\n').forEach(line => {
       var [en, ja] = line.split("\t");
       problems.push([en, ja]);
