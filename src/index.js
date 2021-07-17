@@ -242,7 +242,7 @@ function setVoiceInput() {
         replyObj.textContent = '◯ ' + answer;
       } else {
         playAudio(incorrectAudio);
-        replyObj.textContent = '× ' + answer;
+        replyObj.textContent = '× ' + reply;
       }
       voiceInput.stop();
     };
