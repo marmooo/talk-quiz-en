@@ -236,13 +236,13 @@ function setVoiceInput() {
     voiceInput.onresult = (event) => {
       const reply = event.results[0][0].transcript;
       const replyObj = document.getElementById('reply');
-      if (reply.toLowerCase() == answer.toLowerCase()) {
+      if (reply.toLowerCase().split(' ').includes(answer.toLowerCase())) {
         correctCount += 1;
         playAudio(correctAudio);
-        replyObj.textContent = '◯ ' + reply;
+        replyObj.textContent = '◯ ' + answer;
       } else {
         playAudio(incorrectAudio);
-        replyObj.textContent = '× ' + reply;
+        replyObj.textContent = '× ' + answer;
       }
       voiceInput.stop();
     };
