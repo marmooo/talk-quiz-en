@@ -1,5 +1,5 @@
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWZXYabcdefghijklmnopqrstuvwxyz';
-let incorrectAudio, correctAudio;
+let endAudio, incorrectAudio, correctAudio;
 loadAudios();
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
@@ -8,6 +8,8 @@ let problems = [];
 let answer = 'Gopher';
 let firstRun = true;
 let englishVoices = [];
+let correctCount = 0;
+
 
 function loadConfig() {
   if (localStorage.getItem('darkMode') == 1) {
@@ -95,12 +97,14 @@ function loadAudio(url) {
 
 function loadAudios() {
   promises = [
+    loadAudio('mp3/end.mp3'),
     loadAudio('mp3/incorrect1.mp3'),
     loadAudio('mp3/correct3.mp3'),
   ];
   Promise.all(promises).then(audioBuffers => {
-    incorrectAudio = audioBuffers[0];
-    correctAudio = audioBuffers[1];
+    endAudio = audioBuffers[0];
+    incorrectAudio = audioBuffers[1];
+    correctAudio = audioBuffers[2];
   });
 }
 
@@ -176,14 +180,12 @@ function nextProblem() {
 
 function initProblems() {
   var grade = document.getElementById('grade').selectedIndex;
-  console.log(grade);
   fetch(grade + '.lst').then(response => response.text()).then(tsv => {
     problems = [];
     tsv.split('\n').forEach(line => {
       var [en, ja] = line.split("\t");
       problems.push([en, ja]);
     });
-    console.log(problems);
   });
 }
 initProblems();
@@ -233,11 +235,14 @@ function setVoiceInput() {
     };
     voiceInput.onresult = (event) => {
       const reply = event.results[0][0].transcript;
-      document.getElementById('reply').textContent = reply;
+      const replyObj = document.getElementById('reply');
       if (reply.toLowerCase() == answer.toLowerCase()) {
+        correctCount += 1;
         playAudio(correctAudio);
+        replyObj.textContent = '◯ ' + reply;
       } else {
         playAudio(incorrectAudio);
+        replyObj.textContent = '× ' + reply;
       }
       voiceInput.stop();
     };
@@ -256,6 +261,51 @@ function stopVoiceInput() {
   stopButton.classList.add('d-none');
   document.getElementById('reply').textContent = '英語で答えてください';
   voiceInput.stop();
+}
+
+let gameTimer;
+function startGameTimer() {
+  clearInterval(gameTimer);
+  const timeNode = document.getElementById('time');
+  timeNode.innerText = '180秒 / 180秒';
+  gameTimer = setInterval(function() {
+    const arr = timeNode.innerText.split('秒 /');
+    const t = parseInt(arr[0]);
+    if (t > 0) {
+      timeNode.innerText = (t-1) + '秒 /' + arr[1];
+    } else {
+      clearInterval(gameTimer);
+      playAudio(endAudio);
+      playPanel.classList.add('d-none');
+      scorePanel.classList.remove('d-none');
+      document.getElementById('score').textContent = correctCount;
+    }
+  }, 1000);
+}
+
+let countdownTimer;
+function countdown() {
+  clearTimeout(countdownTimer);
+  gameStart.classList.remove('d-none');
+  playPanel.classList.add('d-none');
+  scorePanel.classList.add('d-none');
+  const counter = document.getElementById('counter');
+  counter.innerText = 3;
+  countdownTimer = setInterval(function(){
+    const colors = ['skyblue', 'greenyellow', 'violet', 'tomato'];
+    if (parseInt(counter.innerText) > 1) {
+      const t = parseInt(counter.innerText) - 1;
+      counter.style.backgroundColor = colors[t];
+      counter.innerText = t;
+    } else {
+      clearTimeout(countdownTimer);
+      gameStart.classList.add('d-none');
+      playPanel.classList.remove('d-none');
+      correctCount = 0;
+      document.getElementById('score').textContent = correctCount;
+      startGameTimer();
+    }
+  }, 1000);
 }
 
 

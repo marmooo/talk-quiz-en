@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-07-17 15:31';
+var CACHE_NAME = '2021-07-17 20:20';
 var urlsToCache = [
   '/talk-quiz-en/',
   '/talk-quiz-en/0.lst',
@@ -9,6 +9,7 @@ var urlsToCache = [
   '/talk-quiz-en/5.lst',
   '/talk-quiz-en/6.lst',
   '/talk-quiz-en/index.js',
+  '/talk-quiz-en/mp3/end.mp3',
   '/talk-quiz-en/mp3/incorrect1.mp3',
   '/talk-quiz-en/mp3/correct3.mp3',
   '/talk-quiz-en/favicon/original.svg',
