@@ -175,7 +175,7 @@ function nextProblem() {
 }
 
 function initProblems() {
-  var grade = document.getElementById('grade').selectedIndex + 2;
+  var grade = document.getElementById('grade').selectedIndex;
   console.log(grade);
   fetch(grade + '.lst').then(response => response.text()).then(tsv => {
     problems = [];
