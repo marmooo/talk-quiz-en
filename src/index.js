@@ -147,32 +147,13 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-function hideAnswer() {
-  var node = document.getElementById('answer');
-  node.classList.add('d-none');
-}
-
-function showAnswer() {
-  speak(answer);
-  if (firstRun) {
-    voiceInput.abort();
-  }
-  var node = document.getElementById('answer');
-  node.classList.remove('d-none');
-  node.textContent = answer;
-}
-
 function nextProblem() {
   var [en, ja] = problems[getRandomInt(0, problems.length - 1)];
   var input = document.getElementById('cse-search-input-box-id');
   input.value = ja;
   answer = en;
-  hideAnswer();
   const problem = document.getElementById('problem');
-  problem.innerText = ja;
-  if (isEnabled(document.getElementById('english'))) {
-    problem.innerText += ' (' + en + ')';
-  }
+  problem.innerText = ja + ' (' + en + ')';
   if (localStorage.getItem('voice') != 0) {
     speak(answer);
   }
