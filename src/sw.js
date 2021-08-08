@@ -13,7 +13,7 @@ var urlsToCache = [
   '/talk-quiz-en/mp3/incorrect1.mp3',
   '/talk-quiz-en/mp3/correct3.mp3',
   '/talk-quiz-en/favicon/original.svg',
-  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css',
 ];
 
 self.addEventListener('install', function(event) {
