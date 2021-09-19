@@ -132,6 +132,11 @@ function getRandomInt(min, max) {
 }
 
 function nextProblem() {
+  const searchButton = document.getElementById("searchButton");
+  searchButton.disabled = true;
+  setTimeout(function () {
+    searchButton.disabled = false;
+  }, 2000);
   const [en, ja] = problems[getRandomInt(0, problems.length - 1)];
   const input = document.getElementById("cse-search-input-box-id");
   input.value = ja;
