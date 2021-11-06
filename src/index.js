@@ -97,10 +97,17 @@ function loadVoices() {
     if (voices.length !== 0) {
       resolve(voices);
     } else {
+      let supported = false;
       speechSynthesis.addEventListener("voiceschanged", function () {
+        supported = true;
         voices = speechSynthesis.getVoices();
         resolve(voices);
       });
+      setTimeout(() => {
+        if (!supported) {
+          document.getElementById("noTTS").classList.remove("d-none");
+        }
+      }, 1000);
     }
   });
   allVoicesObtained.then((voices) => {
@@ -187,7 +194,7 @@ document.getElementById("cse-search-box-form-id").onsubmit = searchByGoogle;
 
 function setVoiceInput() {
   if (!("webkitSpeechRecognition" in window)) {
-    document.getElementById("nosupport").classList.remove("d-none");
+    document.getElementById("noSTT").classList.remove("d-none");
   } else {
     const voiceInput = new webkitSpeechRecognition();
     voiceInput.lang = "en-US";
