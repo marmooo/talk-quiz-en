@@ -1,13 +1,13 @@
 let problems = [];
 let answer = "Gopher";
 let firstRun = true;
-let englishVoices = [];
 let correctCount = 0;
+let englishVoices = [];
+const voiceInput = setVoiceInput();
 let endAudio, incorrectAudio, correctAudio;
 loadAudios();
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
-const voiceInput = setVoiceInput();
 loadConfig();
 
 function loadConfig() {
