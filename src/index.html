@@ -45,7 +45,7 @@
         <div class="container flex-wrap">
           <a class="navbar-brand" href="/talk-quiz-en/">
             <img alt="英会話クイズ" src="/talk-quiz-en/favicon/favicon.svg" width="32" height="32">
-            <ruby>英会話<rp>(</rp><rt>えいかいわ</rt><rp>)</rp></ruby>クイズ
+            英会話クイズ
           </a>
           <div class="navbar-nav">
             <select id="grade" class="form-select form-select-sm" aria-label="学年">
@@ -87,34 +87,34 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
         </div>
       </div>
       <div id="scorePanel" class="text-center pb-3 d-none">
-        <h3 class="pt-3">
-          <ruby>結果<rp>(</rp><rt>けっか</rt><rp>)</rp></ruby>
-        </h3>
+        <h3 class="pt-3">結果</h3>
         <img src="img/witch-learning.png" width="170" height="128" alt="witch-learning">
         <p>クリアしたのは・・・</p>
         <div class="h2 pb-3">
-          <span id="score" class="h1">0</span>
-          <ruby>問<rp>(</rp><rt>もん</rt><rp>)</rp></ruby>！
+          <span id="score" class="h1">0</span>問！
         </div>
         <button id="restartButton" type="button" class="btn btn-primary btn-lg m-1">リスタート</button>
       </div>
       <div id="playPanel">
         <div class="row">
           <div class="col-sm">
-            <p><ruby>画像<rt>がぞう</rt></ruby>から<ruby>英単語<rt>えいたんご</rt></ruby>を<ruby>当<rt>あ</rt></ruby>てるクイズです。
-              ｢これなあに？｣を<ruby>押<rt>お</rt></ruby>すとランダムにクイズを<ruby>出<rt>だ</rt></ruby>します。
+            <p>画像から英単語を当てるクイズです。
+              ｢これなあに？｣を押すとランダムにクイズを出題します。
             </p>
-            <p><ruby>採点<rt>さいてん</rt></ruby>がきびしい<ruby>単語<rt>たんご</rt></ruby>は<ruby>文章<rt>ぶんしょう</rt></ruby>で<ruby>答<rt>こた</rt></ruby>えてみてください。こたえの<ruby>単語<rt>たんご</rt></ruby>がふくまれていれば<ruby>正解<rt>せいかい</rt></ruby>になります。ただし<ruby>複数形<rt>ふくすうけい</rt></ruby>には<ruby>注意<rt>ちゅうい</rt></ruby>しましょう。</p>
-            <ul>
-              <li>◯ cup → a <b>cup</b> of coffee</li>
-              <li>× cup → <b>cups</b> of coffee</li>
+            <p>採点が厳しい単語は文章で答えてみてください。
+            こたえの単語がふくまれていれば正解になります。
+            ただし複数形には注意しましょう。
+            </p>
+            <ul class="notranslate">
+              <li>⭕ cup → a <b>cup</b> of coffee</li>
+              <li>❌ cup → <b>cups</b> of coffee</li>
             </ul>
           </div>
           <div class="col-sm">
             <div class="alert alert-info text-center">
-              <div class="h5">
-                <label><ruby>時間<rp>(</rp><rt>じかん</rt><rp>)</rp></ruby>:</label>
-                <span id="time" class="ms-1">180秒 / 180秒</span>
+              <div class="h5 text-nowrap notranslate">
+                <span id="time">180</span>
+                <span> / 180 sec</span>
               </div>
               <button id="startButton" class="btn btn-primary btn-lg">スタート</button>
             </div>
@@ -127,13 +127,16 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
           </form>
         </div>
         <div class="text-center">
-          <div class="pt-4 h5">問題: <span id="problem">ゴファー</span>
-            <button id="respeak" title="もう一度聴く" class="btn btn-outline-secondary btn-lg ms-1">
+          <div class="pt-4 h5">問題:
+            <span id="problemJp" class="ms-1">ゴファー</span>
+            <span id="problemEn" class="ms-1 notranslate">(Gopher)</span>
+            <button id="respeak" title="もう一度聴く" class="btn btn-outline-secondary btn-lg ms-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
             </button>
           </div>
-          <div id="recognitionPanel" class="text-center pt-1">
-            <span id="reply" class="pe-2 h5">英語で答えてください</span>
+          <div id="recognitionPanel" class="pt-1">
+            <span id="replyPlease" class="me-2 h5">英語で答えてください</span>
+            <span id="reply" class="me-2 h5 notranslate"></span>
             <button id="startVoiceInput" title="音声入力を開始する" class="btn btn-outline-secondary rounded-pill">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="64" height="64"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
             </button>
@@ -165,8 +168,8 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
         <label>サポート状況 (2022):</label>
         <table class="table table-sm table-striped w-auto m-auto text-nowrap">
           <tbody>
-            <tr><th></th><th>Chrome</th><th>Edge</th><th>Safari</th><th>Firefox</th></tr>
-            <tr><td>音声認識</td><td>○</td><td>×</td><td>×</td><td>×</td></tr>
+            <tr class="notranslate"><th></th><th>Chrome</th><th>Edge</th><th>Safari</th><th>Firefox</th></tr>
+            <tr><td>音声認識</td><td>⭕</td><td>❌</td><td>❌</td><td>❌</td></tr>
           </tbody>
         </table>
       </div>

@@ -1,3 +1,6 @@
+const replyPlease = document.getElementById("replyPlease");
+const reply = document.getElementById("reply");
+const gameTime = 180;
 let problems = [];
 let answer = "Gopher";
 let firstRun = true;
@@ -148,8 +151,8 @@ function nextProblem() {
   const input = document.getElementById("cse-search-input-box-id");
   input.value = ja;
   answer = en;
-  const problem = document.getElementById("problem");
-  problem.textContent = ja + " (" + en + ")";
+  document.getElementById("problemJp").textContent = ja;
+  document.getElementById("problemEn").textContent = `(${en})`;
   if (localStorage.getItem("voice") != 0) {
     speak(answer);
   }
@@ -167,7 +170,6 @@ function initProblems() {
       });
     });
 }
-initProblems();
 
 function searchByGoogle(event) {
   event.preventDefault();
@@ -187,7 +189,8 @@ function searchByGoogle(event) {
     }
     firstRun = false;
   }
-  document.getElementById("reply").textContent = "英語で答えてください";
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   return false;
 }
 document.getElementById("cse-search-box-form-id").onsubmit = searchByGoogle;
@@ -213,19 +216,20 @@ function setVoiceInput() {
       }
     };
     voiceInput.onresult = (event) => {
-      const reply = event.results[0][0].transcript;
-      const replyObj = document.getElementById("reply");
-      if (reply.toLowerCase().split(" ").includes(answer.toLowerCase())) {
+      const replyText = event.results[0][0].transcript;
+      if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
         playAudio(correctAudio);
-        replyObj.textContent = "◯ " + answer;
+        reply.textContent = "⭕ " + answer;
         document.getElementById("searchButton").classList.add(
           "animate__heartBeat",
         );
       } else {
         playAudio(incorrectAudio);
-        replyObj.textContent = "× " + reply;
+        reply.textContent = "❌ " + replyText;
       }
+      replyPlease.classList.add("d-none");
+      reply.classList.remove("d-none");
       voiceInput.stop();
     };
     return voiceInput;
@@ -241,20 +245,24 @@ function stopVoiceInput() {
   const stopButton = document.getElementById("stopVoiceInput");
   startButton.classList.remove("d-none");
   stopButton.classList.add("d-none");
-  document.getElementById("reply").textContent = "英語で答えてください";
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   voiceInput.stop();
+}
+
+function initTime() {
+  document.getElementById("time").textContent = gameTime;
 }
 
 let gameTimer;
 function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
-  timeNode.textContent = "180秒 / 180秒";
+  initTime();
   gameTimer = setInterval(function () {
-    const arr = timeNode.textContent.split("秒 /");
-    const t = parseInt(arr[0]);
+    const t = parseInt(timeNode.textContent);
     if (t > 0) {
-      timeNode.textContent = (t - 1) + "秒 /" + arr[1];
+      timeNode.textContent = t - 1;
     } else {
       clearInterval(gameTimer);
       playAudio(endAudio);
@@ -292,6 +300,8 @@ function countdown() {
     }
   }, 1000);
 }
+
+initProblems();
 
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("toggleVoice").onclick = toggleVoice;
