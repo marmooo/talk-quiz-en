@@ -95,13 +95,13 @@ function loadAudios() {
 
 function loadVoices() {
   // https://stackoverflow.com/questions/21513706/
-  const allVoicesObtained = new Promise(function (resolve) {
+  const allVoicesObtained = new Promise((resolve) => {
     let voices = speechSynthesis.getVoices();
     if (voices.length !== 0) {
       resolve(voices);
     } else {
       let supported = false;
-      speechSynthesis.addEventListener("voiceschanged", function () {
+      speechSynthesis.addEventListener("voiceschanged", () => {
         supported = true;
         voices = speechSynthesis.getVoices();
         resolve(voices);
@@ -144,7 +144,7 @@ function getRandomInt(min, max) {
 function nextProblem() {
   const searchButton = document.getElementById("searchButton");
   searchButton.disabled = true;
-  setTimeout(function () {
+  setTimeout(() => {
     searchButton.disabled = false;
   }, 2000);
   const [en, ja] = problems[getRandomInt(0, problems.length - 1)];
@@ -259,7 +259,7 @@ function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
   initTime();
-  gameTimer = setInterval(function () {
+  gameTimer = setInterval(() => {
     const t = parseInt(timeNode.textContent);
     if (t > 0) {
       timeNode.textContent = t - 1;
@@ -281,7 +281,7 @@ function countdown() {
   scorePanel.classList.add("d-none");
   const counter = document.getElementById("counter");
   counter.textContent = 3;
-  countdownTimer = setInterval(function () {
+  countdownTimer = setInterval(() => {
     const colors = ["skyblue", "greenyellow", "violet", "tomato"];
     if (parseInt(counter.textContent) > 1) {
       const t = parseInt(counter.textContent) - 1;
