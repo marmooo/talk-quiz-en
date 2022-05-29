@@ -1,13 +1,13 @@
-var CACHE_NAME = '2022-05-29 09:00';
+var CACHE_NAME = "2022-05-29 09:05";
 var urlsToCache = [
   "/talk-quiz-en/",
-  "/talk-quiz-en/0.lst",
-  "/talk-quiz-en/1.lst",
-  "/talk-quiz-en/2.lst",
-  "/talk-quiz-en/3.lst",
-  "/talk-quiz-en/4.lst",
-  "/talk-quiz-en/5.lst",
-  "/talk-quiz-en/6.lst",
+  "/talk-quiz-en/data/0.tsv",
+  "/talk-quiz-en/data/1.tsv",
+  "/talk-quiz-en/data/2.tsv",
+  "/talk-quiz-en/data/3.tsv",
+  "/talk-quiz-en/data/4.tsv",
+  "/talk-quiz-en/data/5.tsv",
+  "/talk-quiz-en/data/6.tsv",
   "/talk-quiz-en/index.js",
   "/talk-quiz-en/mp3/end.mp3",
   "/talk-quiz-en/mp3/incorrect1.mp3",
