@@ -1,4 +1,4 @@
-var CACHE_NAME = "2022-05-29 09:05";
+var CACHE_NAME = "2022-06-05 11:40";
 var urlsToCache = [
   "/talk-quiz-en/",
   "/talk-quiz-en/data/0.tsv",
