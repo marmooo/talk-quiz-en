@@ -244,10 +244,8 @@ function startVoiceInput() {
 }
 
 function stopVoiceInput() {
-  const startButton = document.getElementById("startVoiceInput");
-  const stopButton = document.getElementById("stopVoiceInput");
-  startButton.classList.remove("d-none");
-  stopButton.classList.add("d-none");
+  document.getElementById("startVoiceInput").classList.remove("d-none");
+  document.getElementById("stopVoiceInput").classList.add("d-none");
   replyPlease.classList.remove("d-none");
   reply.classList.add("d-none");
   voiceInput.stop();
@@ -282,6 +280,8 @@ function countdown() {
   countPanel.classList.remove("d-none");
   playPanel.classList.add("d-none");
   scorePanel.classList.add("d-none");
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   const counter = document.getElementById("counter");
   counter.textContent = 3;
   countdownTimer = setInterval(() => {
@@ -315,8 +315,8 @@ document.getElementById("respeak").onclick = respeak;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("searchButton").addEventListener(
   "animationend",
-  function () {
-    this.classList.remove("animate__heartBeat");
+  (e) => {
+    e.target.classList.remove("animate__heartBeat");
   },
 );
 document.getElementById("grade").onchange = initProblems;
