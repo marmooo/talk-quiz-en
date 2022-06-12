@@ -154,7 +154,7 @@ function nextProblem() {
   const input = document.getElementById("cse-search-input-box-id");
   input.value = ja;
   answer = en;
-  document.getElementById("problemJp").textContent = ja;
+  document.getElementById("problemJa").textContent = ja;
   document.getElementById("problemEn").textContent = `(${en})`;
   if (localStorage.getItem("voice") != 0) {
     speak(answer);
@@ -208,10 +208,8 @@ function setVoiceInput() {
     voiceInput.continuous = true;
 
     voiceInput.onstart = () => {
-      const startButton = document.getElementById("startVoiceInput");
-      const stopButton = document.getElementById("stopVoiceInput");
-      startButton.classList.add("d-none");
-      stopButton.classList.remove("d-none");
+      document.getElementById("startVoiceInput").classList.add("d-none");
+      document.getElementById("stopVoiceInput").classList.remove("d-none");
     };
     voiceInput.onend = () => {
       if (!speechSynthesis.speaking) {
