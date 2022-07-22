@@ -36,20 +36,6 @@ function toggleDarkMode() {
   }
 }
 
-function toggleVoice() {
-  if (localStorage.getItem("voice") != 0) {
-    localStorage.setItem("voice", 0);
-    document.getElementById("voiceOn").classList.add("d-none");
-    document.getElementById("voiceOff").classList.remove("d-none");
-    speechSynthesis.cancel();
-  } else {
-    localStorage.setItem("voice", 1);
-    document.getElementById("voiceOn").classList.remove("d-none");
-    document.getElementById("voiceOff").classList.add("d-none");
-    speak(answer);
-  }
-}
-
 function playAudio(audioBuffer, volume) {
   const audioSource = audioContext.createBufferSource();
   audioSource.buffer = audioBuffer;
@@ -156,9 +142,7 @@ function nextProblem() {
   answer = en;
   document.getElementById("problemJa").textContent = ja;
   document.getElementById("problemEn").textContent = `(${en})`;
-  if (localStorage.getItem("voice") != 0) {
-    speak(answer);
-  }
+  speak(answer);
 }
 
 function initProblems() {
@@ -305,7 +289,6 @@ function countdown() {
 initProblems();
 
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
-document.getElementById("toggleVoice").onclick = toggleVoice;
 document.getElementById("restartButton").onclick = countdown;
 document.getElementById("startButton").onclick = countdown;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
