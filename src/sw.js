@@ -1,4 +1,4 @@
-var CACHE_NAME = "2022-09-11 08:49";
+var CACHE_NAME = "2022-10-08 11:03";
 var urlsToCache = [
   "/talk-quiz-en/",
   "/talk-quiz-en/data/0.tsv",
@@ -13,7 +13,7 @@ var urlsToCache = [
   "/talk-quiz-en/mp3/incorrect1.mp3",
   "/talk-quiz-en/mp3/correct3.mp3",
   "/talk-quiz-en/favicon/favicon.svg",
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css",
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
 ];
 
