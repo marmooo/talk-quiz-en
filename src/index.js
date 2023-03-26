@@ -316,8 +316,8 @@ document.getElementById("respeak").onclick = respeak;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("searchButton").addEventListener(
   "animationend",
-  (e) => {
-    e.target.classList.remove("animate__heartBeat");
+  (event) => {
+    event.target.classList.remove("animate__heartBeat");
   },
 );
 document.getElementById("grade").onchange = initProblems;
