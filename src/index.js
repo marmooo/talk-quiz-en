@@ -10,10 +10,11 @@ let firstRun = true;
 let correctCount = 0;
 let englishVoices = [];
 const voiceInput = setVoiceInput();
-let endAudio, incorrectAudio, correctAudio;
-loadAudios();
-const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
+const audioBufferCache = {};
+loadAudio("end", "mp3/end.mp3"),
+loadAudio("incorrect", "mp3/incorrect1.mp3"),
+loadAudio("corret", "mp3/correct3.mp3"),
 loadConfig();
 
 function loadConfig() {
@@ -36,50 +37,33 @@ function toggleDarkMode() {
   }
 }
 
-function playAudio(audioBuffer, volume) {
-  const audioSource = audioContext.createBufferSource();
-  audioSource.buffer = audioBuffer;
+async function playAudio(name, volume) {
+  const audioBuffer = await loadAudio(name, audioBufferCache[name]);
+  const sourceNode = audioContext.createBufferSource();
+  sourceNode.buffer = audioBuffer;
   if (volume) {
     const gainNode = audioContext.createGain();
     gainNode.gain.value = volume;
     gainNode.connect(audioContext.destination);
-    audioSource.connect(gainNode);
-    audioSource.start();
+    sourceNode.connect(gainNode);
+    sourceNode.start();
   } else {
-    audioSource.connect(audioContext.destination);
-    audioSource.start();
+    sourceNode.connect(audioContext.destination);
+    sourceNode.start();
   }
+}
+
+async function loadAudio(name, url) {
+  if (audioBufferCache[name]) return audioBufferCache[name];
+  const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  audioBufferCache[name] = audioBuffer;
+  return audioBuffer;
 }
 
 function unlockAudio() {
   audioContext.resume();
-}
-
-function loadAudio(url) {
-  return fetch(url)
-    .then((response) => response.arrayBuffer())
-    .then((arrayBuffer) => {
-      return new Promise((resolve, reject) => {
-        audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
-          resolve(audioBuffer);
-        }, (err) => {
-          reject(err);
-        });
-      });
-    });
-}
-
-function loadAudios() {
-  promises = [
-    loadAudio("mp3/end.mp3"),
-    loadAudio("mp3/incorrect1.mp3"),
-    loadAudio("mp3/correct3.mp3"),
-  ];
-  Promise.all(promises).then((audioBuffers) => {
-    endAudio = audioBuffers[0];
-    incorrectAudio = audioBuffers[1];
-    correctAudio = audioBuffers[2];
-  });
 }
 
 function loadVoices() {
@@ -236,13 +220,13 @@ function setVoiceInput() {
       const replyText = event.results[0][0].transcript;
       if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
-        playAudio(correctAudio);
+        playAudio("correct");
         reply.textContent = "⭕ " + answer;
         document.getElementById("searchButton").classList.add(
           "animate__heartBeat",
         );
       } else {
-        playAudio(incorrectAudio);
+        playAudio("incorrect");
         reply.textContent = "❌ " + replyText;
       }
       replyPlease.classList.add("d-none");
@@ -284,7 +268,7 @@ function startGameTimer() {
       timeNode.textContent = t - 1;
     } else {
       clearInterval(gameTimer);
-      playAudio(endAudio);
+      playAudio("end");
       playPanel.classList.add("d-none");
       scorePanel.classList.remove("d-none");
       document.getElementById("score").textContent = correctCount;
