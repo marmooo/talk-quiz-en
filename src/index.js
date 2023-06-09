@@ -1,9 +1,11 @@
 const playPanel = document.getElementById("playPanel");
+const infoPanel = document.getElementById("infoPanel");
 const countPanel = document.getElementById("countPanel");
 const scorePanel = document.getElementById("scorePanel");
 const replyPlease = document.getElementById("replyPlease");
 const reply = document.getElementById("reply");
-const gameTime = 180;
+const gameTime = 18;
+let gameTimer;
 let problems = [];
 let answer = "Gopher";
 let firstRun = true;
@@ -222,9 +224,8 @@ function setVoiceInput() {
         correctCount += 1;
         playAudio("correct");
         reply.textContent = "⭕ " + answer;
-        document.getElementById("searchButton").classList.add(
-          "animate__heartBeat",
-        );
+        document.getElementById("searchButton")
+          .classList.add("animate__heartBeat");
       } else {
         playAudio("incorrect");
         reply.textContent = "❌ " + replyText;
@@ -257,7 +258,35 @@ function initTime() {
   document.getElementById("time").textContent = gameTime;
 }
 
-let gameTimer;
+function countdown() {
+  correctCount = 0;
+  countPanel.classList.remove("d-none");
+  playPanel.classList.add("d-none");
+  infoPanel.classList.add("d-none");
+  scorePanel.classList.add("d-none");
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
+  const counter = document.getElementById("counter");
+  counter.textContent = 3;
+  const timer = setInterval(() => {
+    const colors = ["skyblue", "greenyellow", "violet", "tomato"];
+    if (parseInt(counter.textContent) > 1) {
+      const t = parseInt(counter.textContent) - 1;
+      counter.style.backgroundColor = colors[t];
+      counter.textContent = t;
+    } else {
+      clearTimeout(timer);
+      countPanel.classList.add("d-none");
+      infoPanel.classList.remove("d-none");
+      playPanel.classList.remove("d-none");
+      document.getElementById("score").textContent = 0;
+      document.getElementById("searchButton")
+        .classList.add("animate__heartBeat");
+      startGameTimer();
+    }
+  }, 1000);
+}
+
 function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
@@ -271,39 +300,13 @@ function startGameTimer() {
       playAudio("end");
       playPanel.classList.add("d-none");
       scorePanel.classList.remove("d-none");
-      document.getElementById("score").textContent = correctCount;
+      scoring();
     }
   }, 1000);
 }
 
-let countdownTimer;
-function countdown() {
-  clearTimeout(countdownTimer);
-  countPanel.classList.remove("d-none");
-  playPanel.classList.add("d-none");
-  scorePanel.classList.add("d-none");
-  replyPlease.classList.remove("d-none");
-  reply.classList.add("d-none");
-  const counter = document.getElementById("counter");
-  counter.textContent = 3;
-  countdownTimer = setInterval(() => {
-    const colors = ["skyblue", "greenyellow", "violet", "tomato"];
-    if (parseInt(counter.textContent) > 1) {
-      const t = parseInt(counter.textContent) - 1;
-      counter.style.backgroundColor = colors[t];
-      counter.textContent = t;
-    } else {
-      clearTimeout(countdownTimer);
-      countPanel.classList.add("d-none");
-      playPanel.classList.remove("d-none");
-      correctCount = 0;
-      document.getElementById("score").textContent = 0;
-      document.getElementById("searchButton").classList.add(
-        "animate__heartBeat",
-      );
-      startGameTimer();
-    }
-  }, 1000);
+function scoring() {
+  document.getElementById("score").textContent = correctCount;
 }
 
 initProblems();
@@ -314,12 +317,10 @@ document.getElementById("startButton").onclick = countdown;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
 document.getElementById("respeak").onclick = respeak;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
-document.getElementById("searchButton").addEventListener(
-  "animationend",
-  (event) => {
+document.getElementById("searchButton")
+  .addEventListener("animationend", (event) => {
     event.target.classList.remove("animate__heartBeat");
-  },
-);
+  });
 document.getElementById("grade").onchange = initProblems;
 document.addEventListener("click", unlockAudio, {
   once: true,
