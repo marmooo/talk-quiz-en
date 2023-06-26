@@ -185,6 +185,7 @@ function searchByGoogle(event) {
   }
   if (firstRun) {
     document.getElementById("gophers").replaceChildren();
+    document.getElementById("searchResults").classList.remove("d-none");
     firstRun = false;
   }
   replyPlease.classList.remove("d-none");
