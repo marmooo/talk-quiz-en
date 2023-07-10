@@ -4,7 +4,7 @@ const countPanel = document.getElementById("countPanel");
 const scorePanel = document.getElementById("scorePanel");
 const replyPlease = document.getElementById("replyPlease");
 const reply = document.getElementById("reply");
-const gameTime = 18;
+const gameTime = 180;
 let gameTimer;
 let problems = [];
 let answer = "Gopher";
