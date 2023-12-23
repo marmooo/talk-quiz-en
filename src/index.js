@@ -216,12 +216,12 @@ function setVoiceInput() {
       const replyText = event.results[0][0].transcript;
       if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
-        playAudio("correct");
+        playAudio("correct", 0.3);
         reply.textContent = "⭕ " + answer;
         document.getElementById("searchButton")
           .classList.add("animate__heartBeat");
       } else {
-        playAudio("incorrect");
+        playAudio("incorrect", 0.3);
         reply.textContent = "❌ " + replyText;
       }
       replyPlease.classList.add("d-none");
