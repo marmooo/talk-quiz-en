@@ -12,12 +12,12 @@ let firstRun = true;
 let correctCount = 0;
 let englishVoices = [];
 const voiceInput = setVoiceInput();
-const audioContext = new AudioContext();
+const audioContext = new globalThis.AudioContext();
 const audioBufferCache = {};
 loadAudio("end", "mp3/end.mp3"),
-loadAudio("incorrect", "mp3/incorrect1.mp3"),
-loadAudio("corret", "mp3/correct3.mp3"),
-loadConfig();
+  loadAudio("incorrect", "mp3/incorrect1.mp3"),
+  loadAudio("corret", "mp3/correct3.mp3"),
+  loadConfig();
 
 function loadConfig() {
   if (localStorage.getItem("darkMode") == 1) {
@@ -124,7 +124,7 @@ loadVoices();
 
 function speak(text) {
   speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(text);
+  const msg = new globalThis.SpeechSynthesisUtterance(text);
   msg.onend = () => {
     voiceInput.start();
   };
@@ -195,10 +195,10 @@ function searchByGoogle(event) {
 document.getElementById("cse-search-box-form-id").onsubmit = searchByGoogle;
 
 function setVoiceInput() {
-  if (!("webkitSpeechRecognition" in window)) {
+  if (!globalThis.webkitSpeechRecognition) {
     document.getElementById("noSTT").classList.remove("d-none");
   } else {
-    const voiceInput = new webkitSpeechRecognition();
+    const voiceInput = new globalThis.webkitSpeechRecognition();
     voiceInput.lang = "en-US";
     // voiceInput.interimResults = true;
     voiceInput.continuous = true;
