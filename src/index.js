@@ -180,17 +180,15 @@ function nextProblem() {
   speak(answer);
 }
 
-function initProblems() {
+async function initProblems() {
   const grade = document.getElementById("grade").selectedIndex;
-  fetch("data/" + grade + ".tsv")
-    .then((response) => response.text())
-    .then((tsv) => {
-      problems = [];
-      tsv.split("\n").forEach((line) => {
-        const [en, ja] = line.split("\t");
-        problems.push([en, ja]);
-      });
-    });
+  const response = await fetch("data/" + grade + ".tsv");
+  const tsv = await response.text();
+  problems = [];
+  tsv.split("\n").forEach((line) => {
+    const [en, ja] = line.split("\t");
+    problems.push([en, ja]);
+  });
 }
 
 function searchByGoogle(event) {
@@ -324,7 +322,7 @@ function scoring() {
   document.getElementById("score").textContent = correctCount;
 }
 
-initProblems();
+await initProblems();
 
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("restartButton").onclick = countdown;
