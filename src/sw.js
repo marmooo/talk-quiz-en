@@ -1,4 +1,4 @@
-const CACHE_NAME = "2025-06-22 03:20";
+const CACHE_NAME = "2025-06-30 00:00";
 const urlsToCache = [
   "/talk-quiz-en/",
   "/talk-quiz-en/data/0.tsv",
