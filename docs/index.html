@@ -3,12 +3,11 @@
 英会話クイズ</a><div class=navbar-nav><select id=grade class="form-select form-select-sm" aria-label=学年><option>スポーツ<option>食べ物<option>体と生き物<option>身近な言葉<option selected>小4<option>小5<option>小6</select>
 <button title=ダークモード切替 id=toggleDarkMode class="fs-4 btn p-0 ms-1" type=button>🌓</button></div></div></nav></header><main class=container><noscript><div class="alert alert-warning">JavaScript を ON にしてください</div></noscript><div id=noTTS class="alert alert-warning d-none"><p>お使いのブラウザは音声読み上げに対応していません。
 Firefox for Linux は発話モジュールをインストールしてください。例:<pre><code>sudo apt install speech-dispatcher
-sudo apt install festival speech-dispatcher-festival</code></pre></div><div id=noSTT class="alert alert-warning d-none">お使いのブラウザは音声認識に対応していません。Chrome をご利用ください。</div><div id=infoPanel><div class=row><div class=col-md><p>画像から英単語を当てるクイズです。
-｢これなあに？｣を押すとランダムにクイズを出題します。<p>採点が厳しい単語は文章で答えてみてください。
+sudo apt install festival speech-dispatcher-festival</code></pre></div><div id=noSTT class="alert alert-warning d-none">お使いのブラウザは音声認識に対応していません。Chrome をご利用ください。</div><div id=infoPanel><div class=row><div class=col-md><p>画像から英単語を当てるクイズです。<p>採点が厳しい単語は文章で答えてみてください。
 こたえの単語がふくまれていれば正解になります。
 ただし複数形には注意しましょう。<ul class=notranslate><li>⭕ cup → a <b>cup</b> of coffee<li>❌ cup → <b>cups</b> of coffee</ul></div><div class=col-md><div class="alert alert-info text-center"><div class="h5 text-nowrap notranslate"><span id=time>180</span>
 <span>/ 180 sec</span></div><button id=startButton class="btn btn-primary btn-lg" type=button>スタート</button></div></div></div></div><div id=playPanel><div class=text-center><form id=cse-search-box-form-id class=pb-1><input type=hidden value=学校 id=cse-search-input-box-id>
-<input id=searchButton type=submit value=これなあに？ class="btn btn-primary btn-lg mx-1"></form></div><div class=text-center><div class="pt-4 h5"><button id=respeak title=もう一度聴く class="btn p-0" type=button>
+<input id=searchButton type=submit value=次の問題 class="btn btn-primary btn-lg mx-1"></form></div><div class=text-center><div class="pt-4 h5"><button id=respeak title=もう一度聴く class="btn p-0" type=button>
 <svg viewBox="0 0 24 24" width="32" height="32" fill="currentcolor"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31.0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
 </button>
 <span>問題:</span>
