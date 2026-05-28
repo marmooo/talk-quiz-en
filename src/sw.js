@@ -1,4 +1,4 @@
-const cacheName = "2026-03-02 00:00";
+const cacheName = "2026-05-28 00:00";
 const urlsToCache = [
   "/talk-quiz-en/data/0.tsv",
   "/talk-quiz-en/data/1.tsv",
